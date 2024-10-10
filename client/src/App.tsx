@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Officer from './components/officer/Officer';
+import ServiceSelector from './components/customer/ServiceSelector';
 import { BottomBar } from './components/bottombar/Bottombar';
 import { NavB } from './components/navbar/Navbar';
 
@@ -24,6 +25,8 @@ function App() {
             <BottomBar />
           </div>
         } />
+
+        <Route path="/service-selection" element = {<ServiceSelector />} />
       </Routes>
     </>
   );
