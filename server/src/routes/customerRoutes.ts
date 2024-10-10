@@ -5,6 +5,6 @@ import { newCustomerController } from "../controllers/customerController";
 const customerRouter = Router();
 
 
-customerRouter.get('/new-ticket', newCustomerController);
+customerRouter.post('/new-ticket', newCustomerController);
 
 export default customerRouter;
