@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 function Officer(props: any) {
     const [services, setServices] = useState(['']);
     const [customerId, setCustomerId] = useState('');
+    const [served, setServed] = useState(false);
 
     /*useEffect(() => {
         props.getCounterInformation(props.counterId).then((s: string[]) => {
@@ -23,9 +24,11 @@ function Officer(props: any) {
                 </div>
 
                 <div className="flex justify-between">
-                    <button type="button" className="border border-sky-500 rounded-lg p-1 text-xl hover:bg-sky-500 hover:text-white" onClick={() => {
+                    {!served &&
+                        <button type="button" className="border border-indigo-950 rounded-lg p-1 text-xl hover:bg-indigo-950 hover:text-white" onClick={() => {
                             if(customerId != '') {
                                 props.markAsServed(props.counterId);
+                                setServed(true);
                             }
                             else {
                                 alert("Error: you should call a customer first");
@@ -33,7 +36,11 @@ function Officer(props: any) {
                         }}>
                             Mark as Served
                         </button>
-                    <button type="button" className="border border-sky-500 rounded-lg p-1 text-xl hover:bg-sky-500 hover:text-white" onClick={() => props.nextCustomer(props.counterId).then((cId: string) => {setCustomerId(cId);})}>Next Customer</button>
+                    }
+                    {served &&
+                        <button type="button" className="border bg-green-500 rounded-lg p-2 text-xl text-white">Served!</button>
+                    }
+                    <button type="button" className="border border-indigo-950 rounded-lg p-1 text-xl hover:bg-indigo-950 hover:text-white" onClick={() => props.nextCustomer(props.counterId).then((cId: string) => {setCustomerId(cId); setServed(false);})}>Next Customer</button>
                 </div>
             </div>
         </div>
