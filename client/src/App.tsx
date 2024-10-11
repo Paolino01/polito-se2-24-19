@@ -11,14 +11,22 @@ import { Homepage } from './components/homepage';
 import Layout from './Layout';
 
 function App() {
+  //Officer
   const getCounterInformation = async (counterId: number) => {
-    API.getCounterInformation(counterId);
+    return await API.getCounterInformation(counterId);
   };
 
-  const markAsServed = async (counterId: Number) => {};
+  const markAsServed = async (counterId: number) => {
+    API.markAsServed(counterId);
+  };
 
   const nextCustomer = async (counterId: number) => {
-    API.nextCustomer(counterId);
+    return await API.nextCustomer(counterId);
+  };
+
+  //Monitor
+  const getCounterNumbers = async () => {
+    return await API.getCounterNumbers();
   };
 
   return (
@@ -46,7 +54,7 @@ function App() {
           }
         />
         <Route path="/customer" element={<ServiceSelector />} />
-        <Route path="/monitor" element={<Monitor />} />
+        <Route path="/monitor" element={<Monitor getCounterNumbers={getCounterNumbers}/>} />
         <Route path="/statistics" element={<Statistics />} />
       </Route>
     </Routes>

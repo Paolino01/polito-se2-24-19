@@ -1,11 +1,13 @@
-import React from 'react';
-import { Server } from "socket.io";
+import React, { useEffect, useState } from 'react';
+import { io } from "socket.io-client";
 
 const Monitor = (props: any) => {
-  const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
-  const counterNumbers = ['1', '2', '3', '4']; // Four counters
+  const socket = io("http://localhost:3000/askBackendTeam");
 
-  const queues = [
+  const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
+  const [counterNumbers, setCounterNumbers] = useState(['1', '2', '3', '4']); // Four counters
+
+  const [queues, setQueues] = useState([
     ['Haircut', 10],
     ['Shave', 5],
     ['Hair wash', 2],
@@ -14,7 +16,22 @@ const Monitor = (props: any) => {
     ['Facial', 2],
     ['Manicure', 5],
     ['Pedicure', 5],
-  ];
+  ]);
+
+  useEffect(() => {
+    props.getCounterNumbers().then((cn: string[]) => {
+      setCounterNumbers(cn);  
+    });
+  });
+
+  socket.on("nextCustomer", (arg) => {
+    console.log(arg);
+    //TODO: manage the argument received
+  });
+
+  socket.on("updateQueue", (arg) => {
+    setQueues(arg); //TODO: check that the data received from backend are right
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">

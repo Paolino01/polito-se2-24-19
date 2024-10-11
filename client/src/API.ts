@@ -77,5 +77,26 @@ const nextCustomer = async (counterId: number) => {
     }
 }
 
-const API = {getCounterInformation, markAsServed, nextCustomer};
+
+//Monitor
+const getCounterNumbers = async () => {
+    const response = await fetch(SERVER_URL + "/getCounterNumbers/", {
+        method: 'GET',
+        credentials: 'include'
+    });
+    if(response.ok) {
+        return response.json();
+    }
+    else {
+        const errDetail = await response.json();
+        if (errDetail.error)
+            throw errDetail.error
+        if (errDetail.message)
+            throw errDetail.message
+
+        throw new Error("Error retreiving counter numbers");
+    }
+}
+
+const API = {getCounterInformation, markAsServed, nextCustomer, getCounterNumbers};
 export default API;
