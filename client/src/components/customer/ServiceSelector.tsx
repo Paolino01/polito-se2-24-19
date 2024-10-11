@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 // import { useGetServicesQuery, useAddCustomerMutation } from './features/api/apiSlice'
 
-
 const ServiceSelector = () => {
     const [selectedService, setSelectedService] = useState('')
     const [requestOK, setRequestOK] = useState(false)
