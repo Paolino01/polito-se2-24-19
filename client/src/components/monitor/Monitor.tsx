@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Monitor = () => {
   const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
