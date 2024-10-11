@@ -3,13 +3,12 @@ import './App.css';
 import Officer from './components/officer/Officer';
 import ServiceSelector from './components/customer/ServiceSelector';
 import Monitor from './components/monitor/Monitor';
-import Statistics  from './components/manager/Statistics';
+import Statistics from './components/manager/Statistics';
 import { BottomBar } from './components/bottombar/Bottombar';
 import { NavB } from './components/navbar/Navbar';
 import API from './API';
 import { Homepage } from './components/homepage';
 import Layout from './Layout';
-
 
 function App() {
   const getCounterInformation = async (counterId: number) => {
