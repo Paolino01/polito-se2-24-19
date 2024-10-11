@@ -47,7 +47,16 @@ function App() {
             </div>
           }
         />
-        <Route path="/customer" element={<ServiceSelector />} />
+        <Route
+          path="/customer"
+          element={
+            <div>
+              <NavB />
+              <ServiceSelector />
+              <BottomBar />
+            </div>
+          }
+        />
         <Route path="/monitor" element={<Monitor />} />
       </Routes>
     </>
