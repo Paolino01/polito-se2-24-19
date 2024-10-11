@@ -1,6 +1,7 @@
 import React from 'react';
+import { Server } from "socket.io";
 
-const Monitor = () => {
+const Monitor = (props: any) => {
   const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
   const counterNumbers = ['1', '2', '3', '4']; // Four counters
 
