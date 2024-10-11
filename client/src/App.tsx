@@ -3,8 +3,7 @@ import './App.css';
 import Officer from './components/officer/Officer';
 import ServiceSelector from './components/customer/ServiceSelector';
 import Monitor from './components/monitor/Monitor';
-import { BottomBar } from './components/bottombar/Bottombar';
-import { NavB } from './components/navbar/Navbar';
+import Layout from './Layout';
 import API from './API';
 import { Homepage } from './components/homepage';
 
@@ -20,46 +19,24 @@ function App() {
   };
 
   return (
-    <>
-      <Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
         <Route
-          path="/officer/:counterId"
+          path="officer/:counterId"
           element={
-            <div>
-              <NavB />
-              <Officer
-                counterId={useParams()['*']?.split('/')[1]}
-                getCounterInformation={getCounterInformation}
-                markAsServed={markAsServed}
-                nextCustomer={nextCustomer}
-              />
-              <BottomBar />
-            </div>
+            <Officer
+              counterId={useParams()['*']?.split('/')[1]}
+              getCounterInformation={getCounterInformation}
+              markAsServed={markAsServed}
+              nextCustomer={nextCustomer}
+            />
           }
         />
-        <Route
-          path="/"
-          element={
-            <div>
-              <NavB />
-              <Homepage />
-              <BottomBar />
-            </div>
-          }
-        />
-        <Route
-          path="/customer"
-          element={
-            <div>
-              <NavB />
-              <ServiceSelector />
-              <BottomBar />
-            </div>
-          }
-        />
-        <Route path="/monitor" element={<Monitor />} />
-      </Routes>
-    </>
+        <Route path="/" element={<Homepage />} />
+        <Route path="customer" element={<ServiceSelector />} />
+        <Route path="monitor" element={<Monitor />} />
+      </Route>
+    </Routes>
   );
 }
 
