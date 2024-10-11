@@ -18,7 +18,7 @@ const Monitor = (props: any) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <div className="max-w-5xl mx-auto p-8 bg-white rounded-lg shadow-md mt-16 mb-16">
+      <div className="max-w-5xl m-auto p-8 bg-white rounded-lg shadow-md mt-16 mb-16">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Service Monitor
         </h1>
