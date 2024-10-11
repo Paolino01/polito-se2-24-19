@@ -32,7 +32,7 @@ function App() {
                     </div>
                 } />
 
-        <Route path="/service-selection" element = {<ServiceSelector />} />
+        <Route path="/customer" element = {<ServiceSelector />} />
         <Route path="/monitor" element = {<Monitor />} />
       </Routes>
     </>
