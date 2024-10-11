@@ -2,6 +2,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import './App.css';
 import Officer from './components/officer/Officer';
 import ServiceSelector from './components/customer/ServiceSelector';
+import Monitor from './components/monitor/Monitor';
 import { BottomBar } from './components/bottombar/Bottombar';
 import { NavB } from './components/navbar/Navbar';
 import API from './API';
@@ -31,10 +32,11 @@ function App() {
                     </div>
                 } />
 
-                <Route path="/service-selection" element = {<ServiceSelector />} />
-            </Routes>
-        </>
-    );
+        <Route path="/service-selection" element = {<ServiceSelector />} />
+        <Route path="/monitor" element = {<Monitor />} />
+      </Routes>
+    </>
+  );
 }
 
 export default App;
