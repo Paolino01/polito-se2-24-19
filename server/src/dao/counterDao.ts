@@ -1,11 +1,15 @@
-//  A, B, C, D are services
-let cServices1: string[] = ['A', 'B', 'C'];
-let cServices2: string[] = ['B', 'C'];
-let cServices3: string[] = ['C'];
-let cServices4: string[] = ['B', 'D'];
-let cServices5: string[] = ['C', 'D'];
+import { CountersID, Service } from "../components/actors";
 
+// Define the services offered by each counter
+const counterServices: Record<CountersID, Service[]> = {
+    [CountersID.Counter1]: [Service.ServiceA, Service.ServiceB, Service.ServiceC],
+    [CountersID.Counter2]: [Service.ServiceB, Service.ServiceC],
+    [CountersID.Counter3]: [Service.ServiceC],
+    [CountersID.Counter4]: [Service.ServiceB, Service.ServiceD],
+    [CountersID.Counter5]: [Service.ServiceC, Service.ServiceD]
+};
 
-export const getServices = (): string[] => {
-    return [...cServices1, ...cServices2, ...cServices3, ...cServices4, ...cServices5];
+// Function to get services offered by a specific counter
+export const getServices = (counterId: CountersID): Service[] => {
+    return counterServices[counterId] || [];
 };

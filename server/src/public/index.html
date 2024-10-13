@@ -18,13 +18,26 @@
         });
 
         socket.on('newCustomer', (data) => {
-            console.log('Messaggio ricevuto:', data);
+            console.log('New customer received:', data);
             const messagesDiv = document.getElementById('messages');
             const messageElement = document.createElement('p');
             if (typeof data === 'object' && data !== null) {
-                messageElement.textContent = `${data.message} (Counter: ${data.counter})`;
+                messageElement.textContent = `New Customer ID: ${data.id}, People Waiting: ${data.people_waiting}, Waiting Time: ${data.waiting_time}`;
             } else {
-                messageElement.textContent = 'Dati ricevuti non validi';
+                console.log(messageElement)
+                messageElement.textContent = 'Invalid data received';
+            }
+            messagesDiv.appendChild(messageElement);
+        });
+
+        socket.on('nextCustomer', (data) => {
+            console.log('Next customer received:', data);
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            if (typeof data === 'object' && data !== null) {
+                messageElement.textContent = `Next Customer ID: ${data.customer_id}, Counter ID: ${data.counter_id}, Queue Length: ${data.queue_people}`;
+            } else {
+                messageElement.textContent = 'Invalid data received';
             }
             messagesDiv.appendChild(messageElement);
         });

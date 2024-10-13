@@ -10,15 +10,16 @@ export const getNewCustomer = (selected_service: string): Customer => {
     let new_numID = last_numID + 1;
     let new_id: string = selected_service + new_numID;
 
-    //"100" is the temporary waiting time value
-    let newCustomer = new Customer(new_id, 100);
-
     //Diego method
-    //addNewCustomerToQueque(newCustomer.id, selected_service)
+    //people_waiting = addNewCustomerToQueque(newCustomer.id, selected_service)
+    //The method must add the new customer in the queue + return the number of people in it
 
-    //emitEvent('newCustomer', quantity_queue)
+    //"100" is the temporary waiting time value
+    //"5" is the temporary number of people in queue
+    let newCustomer = new Customer(new_id, 5, 100);
+
+    emitEvent('newCustomer', newCustomer)
     //"emitEvent" is used to notify the monitor, soon it will be used!
-    //"quantity_queue" is the updated number of customers in queue, it is returned by a Diego's method
 
     return newCustomer;
 }//getNewCustomer

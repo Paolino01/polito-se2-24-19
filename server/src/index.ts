@@ -1,24 +1,28 @@
 import express from 'express';
 import http from 'http';
 import path from 'path';
+import bodyParser from 'body-parser';
 import { initializeSocket } from './socket';
 import routes from './routes';
 import { log } from './utils/logger';
 import customerRoutes from './routes/customerRoutes';
 import officerRoutes from './routes/officerRoutes';
 
-// Crea un'applicazione Express
+// Create an Express application
 const app = express();
 const server = http.createServer(app);
 
-// Inizializza Socket.IO
+// Initialize Socket.IO
 initializeSocket(server);
 
-// Serve il file index.html
-//  Inserito per testare la connessione con socket.io
+// Middleware to parse JSON request bodies
+app.use(bodyParser.json());
+
+// Serve the index.html file
+// Added to test the connection with socket.io
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Utilizza le rotte definite nel file routes/index.ts
+// Use the routes defined in routes/index.ts
 app.use('/', routes);
 app.use('/customer', customerRoutes);
 app.use('/officer', officerRoutes);
@@ -29,8 +33,8 @@ app.use('/manager', managerRoutes)
 app.use('/admin', adminRoutes) 
 */
 
-// Avvia il server
+// Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    log(`Server in ascolto sulla porta ${PORT}`);
+    log(`Server is listening on port ${PORT}`);
 });
