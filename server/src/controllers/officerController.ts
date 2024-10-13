@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from "express";
-import { getNextCustomer } from "../services/officerService";
+import { getNextCustomer, retriveServices } from "../services/officerService";
 import { CountersID } from "../components/actors";
 
 //  TODO
@@ -14,5 +14,16 @@ export const nextCustomerController: RequestHandler = (req, res) => {
     }
     const customer = getNextCustomer(counterId);
     res.send(customer);
+    return;
+};
+
+export const retriveServicesController: RequestHandler = (req, res) => {
+    const counterId = req.body.counter_id as CountersID;
+    if (!counterId || !Object.values(CountersID).includes(counterId)) {
+        res.status(400).send({ error: 'Counter ID is required and must be a valid counter' });
+        return;
+    }
+    const services = retriveServices(counterId);
+    res.send(services);
     return;
 };

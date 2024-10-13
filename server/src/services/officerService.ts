@@ -32,3 +32,7 @@ export const getNextCustomer = (counter_id: CountersID): string => {
     emitEvent('nextCustomer', new_call);
     return new_call.customer_id;
 }//getNewCustomer
+
+export const retriveServices = (counter_id: CountersID): string[] => {
+    return getServices(counter_id)
+}//retriveServices
