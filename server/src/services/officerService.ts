@@ -26,9 +26,15 @@ export const getNextCustomer = (counter_id: CountersID): string => {
     //Input: a service
     //Output: the length of the queue of the input service
 
-    const queue_length = 10; //TEMPORARY
+    const queues_length = {
+        "A": 10,
+        "B": 5,
+        "C": 20,
+    }
 
-    const new_call = new MonitorMessage(first_in_queue, counter_id, queue_length);
+    //TEMPORARY
+
+    const new_call = new MonitorMessage(first_in_queue, counter_id, queues_length);
     emitEvent('nextCustomer', new_call);
     return new_call.customer_id;
 }//getNewCustomer

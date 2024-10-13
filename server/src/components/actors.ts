@@ -13,12 +13,12 @@ class Customer {
 class MonitorMessage {
     customer_id: string
     counter_id: string
-    queue_people: number
+    queues_people: any
 
-    constructor(customer_id: string, counter_id: string, queue_people: number) {
+    constructor(customer_id: string, counter_id: string, queues_people: any) {
         this.customer_id = customer_id;
         this.counter_id = counter_id;
-        this.queue_people = queue_people
+        this.queues_people = queues_people
     }
 }//MonitorMessage
 
