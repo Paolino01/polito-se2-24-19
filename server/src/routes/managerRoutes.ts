@@ -4,6 +4,6 @@ import { managerController } from "../controllers/managerController";
 const managerRouter = Router();
 
 
-managerRouter.post('/seeStats', managerController);
+managerRouter.get('/seeStats', managerController);
 
 export default managerRouter;
