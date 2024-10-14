@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 
 const Monitor = (props: any) => {
-  const socket = io("http://localhost:3000/askBackendTeam");
+  const socket = io("http://localhost:3000/");
 
   const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
   const [counterNumbers, setCounterNumbers] = useState(['1', '2', '3', '4']); // Four counters
