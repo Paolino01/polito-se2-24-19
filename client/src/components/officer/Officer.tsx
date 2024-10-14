@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
 function Officer(props: any) {
-    const [services, setServices] = useState(['']);
-    const [customerId, setCustomerId] = useState('');
+    const [services, setServices] = useState([]);
+    const [customerId, setCustomerId] = useState('Call the first customer');
     const [served, setServed] = useState(false);
 
-    /*useEffect(() => {
-        props.getCounterInformation(props.counterId).then((s: string[]) => {
-            setServices(s);
+    useEffect(() => {
+        props.getCounterInformation(props.counterId).then((s: string) => {
+            setServices(JSON.parse(s));
         });
-    });*/
+    }, []);
 
     return (
         <div className="flex h-screen">
@@ -17,10 +17,10 @@ function Officer(props: any) {
                 <h1 className="text-6xl font-bold">Counter n° {props.counterId}</h1>
 
                 <div className="pt-6 pb-6 text-center">
-                    <span className="text-4xl font-bold">Your services: </span> <span className="text-2xl">{services.join(', ')}</span>
+                    <span className="text-3xl font-bold">Your services: </span> <span className="text-4xl">{services.join(", ")}</span>
                     <br /><br />
 
-                    <span className="text-4xl font-bold">Customer: </span> <span className="text-2xl">{customerId}</span>
+                    <span className="text-3xl font-bold">Customer: </span> <span className="text-4xl">{customerId || "No customer"}</span>
                 </div>
 
                 <div className="flex justify-between">

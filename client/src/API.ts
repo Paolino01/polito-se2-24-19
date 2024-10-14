@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://localhost:3001/askBackendTeam';
+const SERVER_URL = 'http://localhost:3000';
 
 /**
  * 
@@ -6,12 +6,17 @@ const SERVER_URL = 'http://localhost:3001/askBackendTeam';
  * @returns the services provided by this counter
  */
 const getCounterInformation = async (counterId: number) => {
-    const response = await fetch(SERVER_URL + "/counters/" + counterId, {
-        method: 'GET',
-        credentials: 'include'
+    const response = await fetch(SERVER_URL + "/officer/services/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ counter_id: counterId })
     });
     if(response.ok) {
-        return response.json();
+        const services = await response.text();
+        console.log(services);
+        return services;
     }
     else {
         const errDetail = await response.json();
@@ -30,13 +35,12 @@ const getCounterInformation = async (counterId: number) => {
  * @returns nothing
  */
 const markAsServed = async(counterId: number) => {
-    const response = await fetch(SERVER_URL + "/markAsServed/", {
+    const response = await fetch(SERVER_URL + "/officer/markAsServed/", {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ counterId: counterId })
+        body: JSON.stringify({ counter_id: counterId })
     });
 
     if(response.ok) {
@@ -59,12 +63,16 @@ const markAsServed = async(counterId: number) => {
  * @returns the ID of the next customer that needs to be served
  */
 const nextCustomer = async (counterId: number) => {
-    const response = await fetch(SERVER_URL + "/nextCustomer/" + counterId, {
-        method: 'GET',
-        credentials: 'include'
+    const response = await fetch(SERVER_URL + "/officer/next-customer/", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ counter_id: counterId })
     });
     if(response.ok) {
-        return response.json();
+        const customer_id = await response.text();
+        return customer_id;
     }
     else {
         const errDetail = await response.json();
