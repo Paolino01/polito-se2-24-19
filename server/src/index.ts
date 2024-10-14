@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { initializeSocket } from './socket';
 import routes from './routes';
 import { log } from './utils/logger';
+import cors from 'cors';
 import customerRoutes from './routes/customerRoutes';
 import officerRoutes from './routes/officerRoutes';
 
@@ -17,6 +18,10 @@ initializeSocket(server);
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
+
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 
 // Serve the index.html file
 // Added to test the connection with socket.io
