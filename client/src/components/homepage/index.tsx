@@ -36,6 +36,11 @@ function Homepage() {
                 Manager
               </button>
             </Link>
+            <Link to="/administrator">
+              <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+                Administrator
+              </button>
+            </Link>
           </div>
           {showSelector && (
             <div className="mt-4">

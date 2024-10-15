@@ -9,6 +9,7 @@ import { NavB } from './components/navbar/Navbar';
 import API from './API';
 import { Homepage } from './components/homepage';
 import Layout from './Layout';
+import AdminPage from './components/administrator';
 
 function App() {
   //Officer
@@ -43,19 +44,14 @@ function App() {
             />
           }
         />
-        <Route
-          path="/"
-          element={
-            <div>
-              <NavB />
-              <Homepage />
-              <BottomBar />
-            </div>
-          }
-        />
+        <Route path="/" element={<Homepage />} />
         <Route path="/customer" element={<ServiceSelector />} />
-        <Route path="/monitor" element={<Monitor getCounterNumbers={getCounterNumbers}/>} />
+        <Route
+          path="/monitor"
+          element={<Monitor getCounterNumbers={getCounterNumbers} />}
+        />
         <Route path="/statistics" element={<Statistics />} />
+        <Route path="/administrator" element={<AdminPage />} />
       </Route>
     </Routes>
   );
