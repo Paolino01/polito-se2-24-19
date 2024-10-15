@@ -4,6 +4,6 @@ import { nextCustomerController, retriveServicesController } from "../controller
 const officerRouter = Router();
 
 officerRouter.post('/next-customer', nextCustomerController);
-officerRouter.post('/services', retriveServicesController);
+officerRouter.get('/temporary-path/:id', retriveServicesController); //TEMPORARY!!
 
 export default officerRouter;

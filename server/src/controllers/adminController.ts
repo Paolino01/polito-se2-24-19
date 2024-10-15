@@ -1,11 +1,13 @@
 import { Request, RequestHandler, Response } from "express";
-import { getNextCustomer, retriveServices } from "../services/officerService";
-import { CountersID } from "../components/actors";
+import { getInfo } from "../services/counterService";
 
-//  TODO
-//  Receive the id of the counter that pressed the button
-//  Pull the next customer from the queue matching the service of the counter id
-//  Returns the next customer
+export const retriveOfficeInfo: RequestHandler = (req, res) => {
+    const office_info = getInfo();
+    res.send(office_info);
+    return;
+}//retriveOfficeInfo
+
+/*
 export const nextCustomerController: RequestHandler = (req, res) => {
     const counterId = req.body.counter_id as CountersID;
     if (!counterId || !Object.values(CountersID).includes(counterId)) {
@@ -18,13 +20,13 @@ export const nextCustomerController: RequestHandler = (req, res) => {
 }//nextCustomerController
 
 export const retriveServicesController: RequestHandler = (req, res) => {
-    const { id } = req.query;
-    const counterId = id as CountersID;
-    if (!counterId || !Object.values(CountersID).includes(counterId)) {
+    const {id} = req.query;
+    if (!id || !Object.values(CountersID).includes(id)) {
         res.status(400).send({ error: 'Counter ID is required and must be a valid counter' });
         return;
     }
-    const services = retriveServices(counterId);
+    const services = retriveServices(id);
     res.send(services);
     return;
 }//retriveServicesController
+*/
