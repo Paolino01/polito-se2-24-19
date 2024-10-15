@@ -11,7 +11,7 @@ async function addTicketToQueue(
   await redis.lpush(queueName, JSON.stringify(ticket));
 }
 
-async function getQueueLengths() {
+async function getQueuesLengths() {
   /**
    * Method to retrieve the length of all the queues
    */
@@ -103,7 +103,7 @@ async function main() {
   });
 
   // Get the length of all the queues
-  const queueLengths = await getQueueLengths();
+  const queueLengths = await getQueuesLengths();
   console.log('Queues length before operations:', queueLengths);
 
   // Read the value of the last ticket without delete it:
@@ -119,7 +119,7 @@ async function main() {
   console.log('Ultimo ticket:', lastTicketB);
 
   // Get the length of all the queues
-  const newQueueLengths = await getQueueLengths();
+  const newQueueLengths = await getQueuesLengths();
   console.log('Queues length after operations: ', newQueueLengths);
 
   // Service with the highest length
