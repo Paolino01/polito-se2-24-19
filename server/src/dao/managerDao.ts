@@ -11,12 +11,12 @@ export const getCustomerStatsByServiceType = (): Promise<any> => {
             JOIN services s ON t.serviceid = s.serviceid
             GROUP BY t.serviceid, s.name;
         `;
-        
-        db.all(query, (err, rows) => {
+
+        db.all(query, (err: Error, rows: any[]) => {
             if (err) {
-                reject(err); 
+                reject(err);
             } else {
-                resolve(rows); 
+                resolve(rows);
             }
         });
     });
@@ -35,10 +35,10 @@ export const getCustomerStatsByCounter = (): Promise<any> => {
             JOIN services s ON t.serviceid = s.serviceid
             GROUP BY t.counterid, t.serviceid;
         `;
-        
-        db.all(query, (err, rows) => {
+
+        db.all(query, (err: Error, rows: any[]) => {
             if (err) {
-                reject(err); 
+                reject(err);
             } else {
                 resolve(rows);
             }
