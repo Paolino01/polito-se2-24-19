@@ -44,7 +44,8 @@ export async function getLastTicketWithoutRemoving(queueName: string) {
   /**
    * Method to read the value of the first element in a queue
    */
-  const lastElementIndex = (await redis.llen(queueName)) - 1; // get the index of the last element in the list
+  // const lastElementIndex = (await redis.llen(queueName)) - 1; // get the index of the last element in the list
+  const lastElementIndex = 0; // get the index of the last element in the list (n.b. is FIFO).
   const lastTicketString = await redis.lrange(
     queueName,
     lastElementIndex,
@@ -127,7 +128,7 @@ async function main() {
   console.log('The service with the highest length is: ', result);
 
   // Delete all the stored queues
-  await deleteAllQueues();
+  // await deleteAllQueues();
 }
 
 //main();

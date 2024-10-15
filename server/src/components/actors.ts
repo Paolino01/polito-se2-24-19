@@ -1,9 +1,9 @@
 class Customer {
     id: string
     people_waiting: number
-    waiting_time: number
+    waiting_time: string
 
-    constructor(id: string, people_waiting: number, waiting_time: number) {
+    constructor(id: string, people_waiting: number, waiting_time: string) {
         this.id = id;
         this.people_waiting = people_waiting;
         this.waiting_time = waiting_time
