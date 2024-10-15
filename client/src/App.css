@@ -1,0 +1,37 @@
+/* Custom styles for the date picker calendar */
+.react-datepicker {
+    background-color: white; /* Ensures the calendar has a white background */
+    border: 1px solid #e2e8f0; /* Light gray border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+    border-radius: 0.375rem; /* Rounded corners */
+  }
+  
+  .react-datepicker__header {
+    background-color: #3182ce; /* Tailwind's blue-600 */
+    color: white;
+    border-bottom: 1px solid #e2e8f0; /* Separator line */
+  }
+  
+  .react-datepicker__day,
+  .react-datepicker__day-name,
+  .react-datepicker__current-month {
+    color: #2d3748; /* Tailwind's gray-800 */
+  }
+  
+  .react-datepicker__day--selected,
+  .react-datepicker__day--keyboard-selected,
+  .react-datepicker__day--in-range {
+    background-color: #63b3ed; /* Tailwind's blue-400 */
+    color: white;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #bee3f8; /* Light blue for hover state */
+    color: #1a202c; /* Tailwind's gray-900 */
+  }
+  
+  .react-datepicker__day--today {
+    font-weight: bold;
+    color: #2c5282; /* Tailwind's blue-800 */
+  }
+  

@@ -13,8 +13,18 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useState } from 'react';
+import '../../App.css'; 
+
 
 const Statistics = () => {
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [selectedService, setSelectedService] = useState<string>('All Services');
+  const [selectedCounter, setSelectedCounter] = useState<string>('All Counters');
+
   const serviceData = [
     { name: 'Haircut', daily: 15, weekly: 90, monthly: 350 },
     { name: 'Shave', daily: 10, weekly: 70, monthly: 280 },
@@ -39,22 +49,67 @@ const Statistics = () => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+  // Handle Service and Counter Filtering
+  const filteredServiceData = selectedService === 'All Services' 
+    ? serviceData 
+    : serviceData.filter(service => service.name === selectedService);
+
+  const filteredCounterData = selectedCounter === 'All Counters'
+    ? counterData
+    : counterData.map(counter => ({ 
+        name: counter.name, 
+        [selectedService]: counter[selectedService as keyof typeof counter] || 0 
+      }));
+
   return (
     <div className="p-10 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 mb-8 mt-16">
         Statistics
       </h1>
 
+      {/* Date Picker and Filter Controls */}
+      <div className="flex flex-wrap gap-4 mb-8">
+        <div className="bg-white p-4 rounded-lg shadow-lg">
+          <label className="block text-lg font-semibold mb-2">Select Date Range</label>
+          
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-lg">
+          <label className="block text-lg font-semibold mb-2">Filter by Service</label>
+          <select
+            value={selectedService}
+            onChange={(e) => setSelectedService(e.target.value)}
+            className="block border rounded py-2 px-4"
+          >
+            <option>All Services</option>
+            <option>Haircut</option>
+            <option>Shave</option>
+            <option>Hair wash</option>
+            <option>Beard trim</option>
+            <option>Facial</option>
+          </select>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow-lg">
+          <label className="block text-lg font-semibold mb-2">Filter by Counter</label>
+          <select
+            value={selectedCounter}
+            onChange={(e) => setSelectedCounter(e.target.value)}
+            className="block border rounded py-2 px-4">
+            <option>All Counters</option>
+            <option>Counter 1</option>
+            <option>Counter 2</option>
+            <option>Counter 3</option>
+            <option>Counter 4</option>
+          </select>
+        </div>
+      </div>
+
       {/* Service Statistics Bar Chart */}
       <div className="mb-12 bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">
-          Customers Served Per Service
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Customers Served Per Service</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={serviceData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
+          <BarChart data={filteredServiceData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
@@ -66,6 +121,7 @@ const Statistics = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
 
       {/* Counter Distribution Pie Chart */}
       <div className="mb-12 bg-white p-6 shadow-lg rounded-lg">
