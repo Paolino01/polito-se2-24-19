@@ -6,6 +6,8 @@
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
+    "start:redis": "docker compose -f redis.yaml up -d",
+    "start:all": "npm run start:redis && npm run start",
     "build": "tsc"
   },
   "keywords": [],
@@ -21,9 +23,12 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@types/redis": "^4.0.11",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
+    "ioredis": "^5.4.1",
+    "redis": "^4.7.0",
     "socket.io": "^4.8.0"
   }
 }

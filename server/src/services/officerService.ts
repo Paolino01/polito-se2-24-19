@@ -1,44 +1,59 @@
-import { emit } from "process";
-import { MonitorMessage, Service, CountersID } from "../components/actors";
-import { getServices } from "../dao/counterDao";
-import { emitEvent } from "./socketService";
+import { emit } from 'process';
+import { MonitorMessage, Service, CountersID } from '../components/actors';
+import { getServices } from '../dao/counterDao';
+import {
+  serviceWithTheHighestLength,
+  getLastTicket,
+  getQueuesLengths,
+} from './queueService';
+import { emitEvent } from './socketService';
 
-export const getNextCustomer = (counter_id: CountersID): string => {
-    let services = getServices(counter_id);
+export const getNextCustomer = async (counter_id: CountersID): Promise<string | null> => {
+  let services = getServices(counter_id);
+  console.log('Services: ', services);
 
-    //DIEGO'S METHOD
-    //Inputs: an array of services
-    //Output: a service
-    //The method returns the service of the given input which has the HIGHEST length
-    //Tip: try using a "for-each" because the length of the input isn't always the same
+  // DIEGO'S METHOD
+  // Inputs: an array of services
+  // Output: a service
+  // The method returns the service of the given input which has the HIGHEST length
+  // Tip: try using a "for-each" because the length of the input isn't always the same
 
-    const longest_queue = Service.ServiceC; //TEMPORARY
+  const longest_queue = await serviceWithTheHighestLength(services);
+  console.log('Longest queue: ', longest_queue);
 
-    //DIEGO'S METHOD
-    //Input: a service
-    //Output: a customer id
-    //The method returns the FIRST customer_id in the queue of the service given in input
-    //THE METHOD CONSUME (so DELETE) THE CUSTOMER FROM THE QUEUE
+  if (longest_queue == null) {
+    console.log('No service with a queue found');
+    return 'No customer to serve';
+  }
 
-    const first_in_queue = "C3"; //TEMPORARY
+  const first_in_queue = await getLastTicket(longest_queue);
+  console.log('First element in queue: ', first_in_queue);
 
-    //DIEGO'S METHOD
-    //Input: a service
-    //Output: the length of the queue of the input service
+  if (first_in_queue == null) {
+    console.log('No ticket found in the queue');
+    return 'No customer to serve';
+  }
 
-    const queues_length = {
-        "A": 10,
-        "B": 5,
-        "C": 20,
-    }
+  let ticketToCall = first_in_queue.service + first_in_queue.id;
+  console.log('Ticket', ticketToCall);
 
-    //TEMPORARY
+  // DIEGO'S METHOD
+  // Input: a service
+  // Output: the length of the queue of the input service
 
-    const new_call = new MonitorMessage(first_in_queue, counter_id, queues_length);
-    emitEvent('nextCustomer', new_call);
-    return new_call.customer_id;
-}//getNewCustomer
+  const queues_length = await getQueuesLengths();
+  console.log('Queues length: ', queues_length);
+
+  const new_call = new MonitorMessage(
+    ticketToCall,
+    counter_id,
+    queues_length,
+  );
+  emitEvent('nextCustomer', new_call);
+
+  return ticketToCall;
+}; // getNextCustomer
 
 export const retriveServices = (counter_id: CountersID): string[] => {
-    return getServices(counter_id)
-}//retriveServices
+  return getServices(counter_id);
+}; //retriveServices
