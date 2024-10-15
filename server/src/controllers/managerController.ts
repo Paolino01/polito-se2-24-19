@@ -3,8 +3,14 @@ import { getStats } from "../services/managerService";
 
 
 //  TODO
+//  Returns stats for manager based on serviceType and counter
+export const managerController = async (req: Request, res: Response) => {
+    const { type } = req.query;  
 
-export const managerController = (req: Request, res: Response) => {
-    const stats = getStats();
-    res.send(stats);
+    try {
+        const stats = await getStats(type as string); 
+        res.send(stats);  
+    } catch (error) {
+        res.status(500).send({ message: error }); 
+    }
 };

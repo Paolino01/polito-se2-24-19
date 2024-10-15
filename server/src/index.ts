@@ -8,6 +8,7 @@ import { log } from './utils/logger';
 import cors from 'cors';
 import customerRoutes from './routes/customerRoutes';
 import officerRoutes from './routes/officerRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 // Create an Express application
 const app = express();
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/customer', customerRoutes);
 app.use('/officer', officerRoutes);
+app.use('/admin', adminRoutes);
 
 /* 
 TODO: coming soon
