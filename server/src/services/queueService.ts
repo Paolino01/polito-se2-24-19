@@ -1,7 +1,7 @@
 const Redis = require('ioredis');
 const redis = new Redis();
 
-async function addTicketToQueue(
+export async function addTicketToQueue(
   queueName: string,
   ticket: { id: number; service: string },
 ) {
@@ -11,7 +11,7 @@ async function addTicketToQueue(
   await redis.lpush(queueName, JSON.stringify(ticket));
 }
 
-async function getQueuesLengths() {
+export async function getQueuesLengths() {
   /**
    * Method to retrieve the length of all the queues
    */
@@ -25,14 +25,14 @@ async function getQueuesLengths() {
   return queueLengths;
 }
 
-async function getQueueLength(queueName: any) {
+export async function getQueueLength(queueName: any) {
   /**
    * Get the length of a queue passed as a input parameter
    */
   return await redis.llen(queueName);
 }
 
-async function getLastTicket(queueName: string) {
+export async function getLastTicket(queueName: string) {
   /**
    * Method to retrieve (and remove) the first element in a queue
    */
@@ -40,7 +40,7 @@ async function getLastTicket(queueName: string) {
   return ticket ? JSON.parse(ticket) : null;
 }
 
-async function getLastTicketWithoutRemoving(queueName: string) {
+export async function getLastTicketWithoutRemoving(queueName: string) {
   /**
    * Method to read the value of the first element in a queue
    */
@@ -53,7 +53,7 @@ async function getLastTicketWithoutRemoving(queueName: string) {
   return lastTicketString.length > 0 ? JSON.parse(lastTicketString[0]) : null; // return the object if exists or else null.
 }
 
-async function deleteAllQueues() {
+export async function deleteAllQueues() {
   /**
    * This methods delete all the queues saved on Redis
    */
@@ -61,7 +61,7 @@ async function deleteAllQueues() {
   await redis.del(...queueNames);
 }
 
-async function serviceWithTheHighestLength(services: any[]) {
+export async function serviceWithTheHighestLength(services: any[]) {
   /**
    * This methods receive in input an array of services and returns the service that has the highest queue
    */
