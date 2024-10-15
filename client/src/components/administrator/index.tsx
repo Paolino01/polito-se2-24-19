@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CounterSet } from '../../utils/interfaces';
+import { fetchAdminData, saveAssociations } from '../../API';
 
 interface Service {
   id: string;
@@ -10,24 +13,40 @@ interface Counter {
   name: string;
 }
 
-const mockServices: Service[] = [
-  { id: 'service1', name: 'Service 1' },
-  { id: 'service2', name: 'Service 2' },
-  { id: 'service3', name: 'Service 3' },
-];
-
-const mockCounters: Counter[] = [
-  { id: 'counter1', name: 'Counter 1' },
-  { id: 'counter2', name: 'Counter 2' },
-  { id: 'counter3', name: 'Counter 3' },
-];
-
 const AdminPage: React.FC = () => {
-  const [services] = useState<Service[]>(mockServices);
-  const [counters] = useState<Counter[]>(mockCounters);
+  const [services, setServices] = useState<Service[]>([]);
+  const [counters, setCounters] = useState<Counter[]>([]);
   const [associations, setAssociations] = useState<Record<string, string[]>>(
     {},
   );
+  const [showMessage, setShowMessage] = useState<boolean>(false);
+  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data: CounterSet = await fetchAdminData();
+
+        const fetchedServices = data.services.map((service) => ({
+          id: service,
+          name: `Service ${service}`,
+        }));
+
+        const fetchedCounters = data.counters.map((counter) => ({
+          id: counter,
+          name: `Counter ${counter}`,
+        }));
+
+        setServices(fetchedServices);
+        setCounters(fetchedCounters);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleAssociate = (counterId: string, serviceId: string) => {
     setAssociations((prevAssociations) => {
@@ -52,8 +71,35 @@ const AdminPage: React.FC = () => {
     });
   };
 
-  const handleSave = () => {
-    console.log('Associations:', associations);
+  const handleSave = async () => {
+    // Ensure all counters are included in the associations object
+    const completeAssociations = { ...associations };
+    counters.forEach((counter) => {
+      if (!completeAssociations[counter.id]) {
+        completeAssociations[counter.id] = [];
+      }
+    });
+
+    try {
+      const success = await saveAssociations(completeAssociations);
+      if (success) {
+        setShowMessage(true);
+      } else {
+        setShowErrorMessage(true);
+      }
+    } catch (error) {
+      console.error('Error saving associations:', error);
+      setShowErrorMessage(true);
+    }
+  };
+
+  const handleCloseMessage = () => {
+    setShowMessage(false);
+    navigate('/');
+  };
+
+  const handleCloseErrorMessage = () => {
+    setShowErrorMessage(false);
   };
 
   return (
@@ -62,10 +108,6 @@ const AdminPage: React.FC = () => {
         Admin Page
       </h1>
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl">
-        <h2 className="text-3xl font-semibold mb-6 text-gray-700">
-          New Customers
-        </h2>
-
         <div className="mb-6">
           <h3 className="text-2xl font-semibold mb-4 text-gray-600">
             Services
@@ -122,6 +164,38 @@ const AdminPage: React.FC = () => {
           Save
         </button>
       </div>
+
+      {showMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Success</h2>
+            <p className="mb-4">Associations saved successfully!</p>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+              onClick={handleCloseMessage}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showErrorMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-2xl font-bold mb-4">Error</h2>
+            <p className="mb-4">
+              Failed to save associations. Please try again.
+            </p>
+            <button
+              className="bg-red-600 text-white px-4 py-2 rounded"
+              onClick={handleCloseErrorMessage}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

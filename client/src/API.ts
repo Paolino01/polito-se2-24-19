@@ -1,3 +1,5 @@
+import { CounterSet } from "./utils/interfaces";
+
 const SERVER_URL = 'http://localhost:3000';
 
 /**
@@ -13,7 +15,7 @@ const getCounterInformation = async (counterId: number) => {
         },
         body: JSON.stringify({ counter_id: counterId })
     });
-    if(response.ok) {
+    if (response.ok) {
         const services = await response.text();
         console.log(services);
         return services;
@@ -34,7 +36,7 @@ const getCounterInformation = async (counterId: number) => {
  * @param counterId the ID of the counter
  * @returns nothing
  */
-const markAsServed = async(counterId: number) => {
+const markAsServed = async (counterId: number) => {
     const response = await fetch(SERVER_URL + "/officer/markAsServed/", {
         method: 'POST',
         headers: {
@@ -43,7 +45,7 @@ const markAsServed = async(counterId: number) => {
         body: JSON.stringify({ counter_id: counterId })
     });
 
-    if(response.ok) {
+    if (response.ok) {
         return;
     }
     else {
@@ -70,7 +72,7 @@ const nextCustomer = async (counterId: number) => {
         },
         body: JSON.stringify({ counter_id: counterId })
     });
-    if(response.ok) {
+    if (response.ok) {
         const customer_id = await response.text();
         return customer_id;
     }
@@ -92,7 +94,7 @@ const getCounterNumbers = async () => {
         method: 'GET',
         credentials: 'include'
     });
-    if(response.ok) {
+    if (response.ok) {
         return response.json();
     }
     else {
@@ -106,5 +108,31 @@ const getCounterNumbers = async () => {
     }
 }
 
-const API = {getCounterInformation, markAsServed, nextCustomer, getCounterNumbers};
+
+export const fetchAdminData = async (): Promise<CounterSet> => {
+    const response = await fetch(SERVER_URL + '/admin');
+    console.log(response)
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};
+
+export const saveAssociations = async (associations: Record<string, string[]>): Promise<boolean> => {
+    const response = await fetch(`${SERVER_URL}/admin/set-counter`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(associations),
+    });
+
+    if (!response.ok) {
+        return false;
+    }
+
+    return true;
+};
+
+const API = { getCounterInformation, markAsServed, nextCustomer, getCounterNumbers };
 export default API;
