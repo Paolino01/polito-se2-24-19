@@ -6,6 +6,8 @@
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
+    "start:redis": "docker compose -f redis.yaml up -d",
+    "start:all": "npm run start:redis && npm run start",
     "build": "tsc"
   },
   "keywords": [],
