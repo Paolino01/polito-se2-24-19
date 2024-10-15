@@ -1,34 +1,59 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { Route, Routes, useParams } from 'react-router-dom';
 import './App.css';
+import Officer from './components/officer/Officer';
+import ServiceSelector from './components/customer/ServiceSelector';
+import Monitor from './components/monitor/Monitor';
+import Statistics from './components/manager/Statistics';
+import { BottomBar } from './components/bottombar/Bottombar';
+import { NavB } from './components/navbar/Navbar';
+import API from './API';
+import { Homepage } from './components/homepage';
+import Layout from './Layout';
+import AdminPage from './components/administrator';
 
 function App() {
-  const [count, setCount] = useState(0);
+  //Officer
+  const getCounterInformation = async (counterId: number) => {
+    return await API.getCounterInformation(counterId);
+  };
+
+  const markAsServed = async (counterId: number) => {
+    API.markAsServed(counterId);
+  };
+
+  const nextCustomer = async (counterId: number) => {
+    return await API.nextCustomer(counterId);
+  };
+
+  //Monitor
+  const getCounterNumbers = async () => {
+    return await API.getCounterNumbers();
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route
+          path="officer/:counterId"
+          element={
+            <Officer
+              counterId={useParams()['*']?.split('/')[1]}
+              getCounterInformation={getCounterInformation}
+              markAsServed={markAsServed}
+              nextCustomer={nextCustomer}
+            />
+          }
+        />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/customer" element={<ServiceSelector />} />
+        <Route
+          path="/monitor"
+          element={<Monitor getCounterNumbers={getCounterNumbers} />}
+        />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/administrator" element={<AdminPage />} />
+      </Route>
+    </Routes>
   );
 }
 

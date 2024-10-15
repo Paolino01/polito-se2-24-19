@@ -17,9 +17,6 @@
   "version": "1.0.0",
   "description": "Run:\r ```\r cd client\r npm install\r npm run dev\r ```",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC"
 }

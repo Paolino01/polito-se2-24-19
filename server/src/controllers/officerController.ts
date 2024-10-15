@@ -18,7 +18,8 @@ export const nextCustomerController: RequestHandler = (req, res) => {
 }//nextCustomerController
 
 export const retriveServicesController: RequestHandler = (req, res) => {
-    const { id } = req.query;
+    console.log(req.params.id);
+    const id = req.params.id;
     const counterId = id as CountersID;
     if (!counterId || !Object.values(CountersID).includes(counterId)) {
         res.status(400).send({ error: 'Counter ID is required and must be a valid counter' });
