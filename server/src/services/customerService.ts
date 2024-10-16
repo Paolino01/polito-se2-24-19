@@ -31,8 +31,6 @@ export const getNewCustomer = async (selected_service: string): Promise<Customer
         service: selected_service,
     });
 
-
-
     const newQueueLengths = await getQueuesLengths();
 
     console.log('Queues length: ', newQueueLengths);

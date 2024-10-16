@@ -14,6 +14,6 @@ export const newCustomerController: RequestHandler = async (req, res) => {
         return;
     }
     const customer = await getNewCustomer(selectedService);
-    res.send(customer);
+    res.status(200).send(customer);
     return;
 };
