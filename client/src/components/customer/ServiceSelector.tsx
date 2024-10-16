@@ -1,36 +1,31 @@
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-// import { useGetServicesQuery, useAddCustomerMutation } from './features/api/apiSlice'
+import axiosInstance from '../../utils/axiosInstance'
 
 const ServiceSelector = () => {
     const [selectedService, setSelectedService] = useState('')
+    const [error, setError] = useState('')
+    const [ticketUrl, setTicketUrl] = useState('')
     const [requestOK, setRequestOK] = useState(false)
 
-    // const {
-    //   data: servicesData,
-    //   isLoading,
-    //   isSuccess,
-    //   isError,
-    //   error,
-    // } = useGetServicesQuery()
-    const services = [
-        ["Haircut", 30],
-        ["Shave", 15],
-        ["Hair wash", 20],
-        ["Beard trim", 15],
-        ["Hair coloring", 45],
-        ["Facial", 60],
-        ["Manicure", 45],
-        ["Pedicure", 45],
-        ["Massage", 60],
-    ]
-    // const [addCustomer] = useAddCustomerMutation()
+    const services = ["A", "B", "C", "D"]
 
     const handleSubmit = async (event: any) => {
         event.preventDefault()
-        // addCustomer({ service: selectedService })
-        setRequestOK(true)
-        console.log(selectedService)
+        try {
+          const response : any = await axiosInstance.post('customer/new-ticket', { selected_service: selectedService })
+          if (response.status === 200) {
+            const id : string = response.data.id
+            const people_waiting : number = response.data.people_waiting
+            const waiting_time : string = response.data.waiting_time
+            setTicketUrl(`http://localhost:5173/ticket/${id}/${people_waiting}/${waiting_time}`)
+            setRequestOK(true)
+          } else {
+            setError('An error occurred')
+          }
+        } catch (error) {
+          setError('An error occurred')
+        }
     }
 
     const handleServiceChange = (event: any) => {
@@ -41,6 +36,7 @@ const ServiceSelector = () => {
         <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
           {
             !requestOK ? (
+              <div>
             <form 
               onSubmit={handleSubmit} 
               action="#" 
@@ -60,7 +56,7 @@ const ServiceSelector = () => {
               >
                 <option value="" disabled>Select a service</option>
                 {services.map((service, index) => (
-                  <option key={index} value={service[0]}>{service[0]} - {service[1]} mins</option>
+                  <option key={index} value={service}>{service}</option>
                 ))}
               </select>
 
@@ -71,11 +67,14 @@ const ServiceSelector = () => {
                 Submit
               </button>
             </form>
+
+            <p className="text-red-600">{error}</p>
+            </div>
           ) : (
             <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-8 m-4 border text-center">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Here's Your QR Code!</h2>
               <p className="text-gray-700 mb-4">Scan the QR code to get your ticket</p>
-              <QRCodeSVG className="mx-auto mb-6" value="https://reactjs.org" size={180} />
+              <QRCodeSVG className="mx-auto mb-6" value={ticketUrl} size={180} />
               <button 
                 onClick={() => setRequestOK(false)}
                 className="w-full py-3 px-6 bg-gray-600 text-white rounded-md shadow-md hover:bg-gray-500 transition duration-300 ease-in-out"
