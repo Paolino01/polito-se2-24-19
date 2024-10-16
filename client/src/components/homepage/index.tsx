@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Homepage() {
-  const [officerId, setOfficerId] = useState<string>('1'); // Stato per l'ID dell'ufficiale selezionato
+  const [officerId, setOfficerId] = useState<string>('c1'); // Stato per l'ID dell'ufficiale selezionato
   const [showSelector, setShowSelector] = useState<boolean>(false); // Stato per la visibilità del selettore
 
   const handleShowSelector = () => {
@@ -49,10 +49,11 @@ function Homepage() {
                 onChange={(e) => setOfficerId(e.target.value)}
                 className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               >
-                <option value="1">Officer 1</option>
-                <option value="2">Officer 2</option>
-                <option value="3">Officer 3</option>
-                {/* Aggiungi altre opzioni se necessario */}
+                <option value="c1">Officer 1</option>
+                <option value="c2">Officer 2</option>
+                <option value="c3">Officer 3</option>
+                <option value="c4">Officer 4</option>
+                <option value="c5">Officer 5</option>
               </select>
               <Link to={`/officer/${officerId}`}>
                 <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 ml-2">

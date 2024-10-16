@@ -1,3 +1,5 @@
+import { Service } from "../components/actors";
+
 const Redis = require('ioredis');
 const redis = new Redis();
 
@@ -16,12 +18,19 @@ export async function getQueuesLengths() {
    * Method to retrieve the length of all the queues
    */
   const queueNames = await redis.keys('*');
-  const queueLengths: any = {};
+  const queueLengths: Record<string, number> = {};
 
+  // Inizializza tutte le code a 0 utilizzando l'enum Service
+  for (const service of Object.values(Service)) {
+    queueLengths[service] = 0;
+  }
+
+  // Aggiorna le lunghezze delle code esistenti
   for (const queue of queueNames) {
     const length = await redis.llen(queue);
     queueLengths[queue] = length;
   }
+
   return queueLengths;
 }
 

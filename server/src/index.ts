@@ -9,6 +9,7 @@ import cors from 'cors';
 import customerRoutes from './routes/customerRoutes';
 import officerRoutes from './routes/officerRoutes';
 import adminRoutes from './routes/adminRoutes';
+import managerRoutes from './routes/managerRoutes';
 
 // Create an Express application
 const app = express();
@@ -19,6 +20,7 @@ initializeSocket(server);
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(cors({
     origin: 'http://localhost:5173'
@@ -33,6 +35,7 @@ app.use('/', routes);
 app.use('/customer', customerRoutes);
 app.use('/officer', officerRoutes);
 app.use('/admin', adminRoutes);
+app.use('/manager', managerRoutes);
 
 /* 
 TODO: coming soon

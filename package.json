@@ -9,7 +9,7 @@
     "concurrently": "^7.0.0"
   },
   "scripts": {
-    "start:server": "cd server && npm start",
+    "start:server": "cd server && npm run start:all",
     "start:client": "cd client && npm start",
     "start:all": "concurrently \"npm run start:server\" \"npm run start:client\""
   },

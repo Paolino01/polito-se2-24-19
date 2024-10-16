@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function Officer(props: any) {
     const [services, setServices] = useState([]);
-    const [customerId, setCustomerId] = useState('Call the first customer');
+    const [customerId, setCustomerId] = useState('No customer to serve');
     const [served, setServed] = useState(false);
 
     useEffect(() => {
@@ -20,14 +20,14 @@ function Officer(props: any) {
                     <span className="text-3xl font-bold">Your services: </span> <span className="text-4xl">{services.join(", ")}</span>
                     <br /><br />
 
-                    <span className="text-3xl font-bold">Customer: </span> <span className="text-4xl">{customerId || "No customer"}</span>
+                    <span className="text-3xl font-bold">Customer: </span> <span className="text-4xl">{customerId}</span>
                 </div>
 
                 <div className="flex justify-between">
                     {!served &&
                         <button type="button" className="border border-indigo-950 rounded-lg p-1 text-xl hover:bg-indigo-950 hover:text-white" onClick={() => {
-                            if(customerId != '') {
-                                props.markAsServed(props.counterId);
+                            if(customerId != 'No customer to serve') {
+                                //props.markAsServed(props.counterId);  //Will be implemented in the future
                                 setServed(true);
                             }
                             else {
