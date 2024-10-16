@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import axiosInstance from '../../utils/axiosInstance'
+import { set } from 'react-datepicker/dist/date_utils'
 
 const ServiceSelector = () => {
     const [selectedService, setSelectedService] = useState('')
     const [error, setError] = useState('')
     const [ticketUrl, setTicketUrl] = useState('')
     const [requestOK, setRequestOK] = useState(false)
+
+    const [id, setId] = useState('')
+    const [peopleWaiting, setPeopleWaiting] = useState(0)
+    const [waitingTime, setWaitingTime] = useState('')
+    
 
     const services = ["A", "B", "C", "D"]
 
@@ -15,15 +21,18 @@ const ServiceSelector = () => {
         try {
           const response : any = await axiosInstance.post('customer/new-ticket', { selected_service: selectedService })
           if (response.status === 200) {
-            const id : string = response.data.id
-            const people_waiting : number = response.data.people_waiting
-            const waiting_time : string = response.data.waiting_time
-            setTicketUrl(`http://localhost:5173/ticket/${id}/${people_waiting}/${waiting_time}`)
+            setId(response.data.id)
+            setPeopleWaiting(response.data.people_waiting)
+            setWaitingTime(response.data.waiting_time)
+
+            setTicketUrl(`http://localhost:5173/ticket/${id}/${peopleWaiting}/${waitingTime}`)
             setRequestOK(true)
           } else {
+            console.log(response)
             setError('An error occurred')
           }
         } catch (error) {
+          console.log(error)
           setError('An error occurred')
         }
     }
@@ -73,6 +82,11 @@ const ServiceSelector = () => {
           ) : (
             <div className="bg-white shadow-lg rounded-lg max-w-lg w-full p-8 m-4 border text-center">
               <h2 className="text-2xl font-bold text-gray-800 mb-6">Here's Your QR Code!</h2>
+
+              <p className="text-gray-700">ID: {id}</p>
+              <p className="text-gray-700 mb-4">People Waiting: {peopleWaiting}</p>
+              <p className="text-gray-700 mb-4">Estimated Waiting Time: {waitingTime}</p>
+
               <p className="text-gray-700 mb-4">Scan the QR code to get your ticket</p>
               <QRCodeSVG className="mx-auto mb-6" value={ticketUrl} size={180} />
               <button 

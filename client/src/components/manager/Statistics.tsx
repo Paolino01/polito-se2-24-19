@@ -1,195 +1,203 @@
-import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
+import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState } from 'react';
-import '../../App.css'; 
+import axiosInstance from '../../utils/axiosInstance';
 
 
 const Statistics = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [selectedService, setSelectedService] = useState<string>('All Services');
-  const [selectedCounter, setSelectedCounter] = useState<string>('All Counters');
+    const [timeRange, setTimeRange] = useState('daily'); // day, week, month
+    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedService, setSelectedService] = useState('');
+    const [selectedCounter, setSelectedCounter] = useState('');
 
-  const serviceData = [
-    { name: 'Haircut', daily: 15, weekly: 90, monthly: 350 },
-    { name: 'Shave', daily: 10, weekly: 70, monthly: 280 },
-    { name: 'Hair wash', daily: 8, weekly: 50, monthly: 200 },
-    { name: 'Beard trim', daily: 5, weekly: 40, monthly: 150 },
-    { name: 'Facial', daily: 3, weekly: 20, monthly: 80 },
-  ];
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedYear, setSelectedYear] = useState('');
 
-  const counterData = [
-    { name: 'Counter 1', Haircut: 50, Shave: 30, HairWash: 20 },
-    { name: 'Counter 2', Haircut: 40, Shave: 25, HairWash: 15 },
-    { name: 'Counter 3', Haircut: 30, Shave: 20, HairWash: 10 },
-    { name: 'Counter 4', Haircut: 20, Shave: 15, HairWash: 5 },
-  ];
+    const months = [
+        { value: 'January', label: 'January' },
+        { value: 'February', label: 'February' },
+        { value: 'March', label: 'March' },
+        { value: 'April', label: 'April' },
+        { value: 'May', label: 'May' },
+        { value: 'June', label: 'June' },
+        { value: 'July', label: 'July' },
+        { value: 'August', label: 'August' },
+        { value: 'September', label: 'September' },
+        { value: 'October', label: 'October' },
+        { value: 'November', label: 'November' },
+        { value: 'December', label: 'December' },
+    ];
+    
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
-  const pieData = [
-    { name: 'Counter 1', value: 100 },
-    { name: 'Counter 2', value: 80 },
-    { name: 'Counter 3', value: 60 },
-    { name: 'Counter 4', value: 40 },
-  ];
+    const handleDateChange = (date : any) => {
+        setSelectedDate(date);
+    }
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const handleMonthChange = (month : any) => {
+        setSelectedMonth(month);
+    }
 
-  // Handle Service and Counter Filtering
-  const filteredServiceData = selectedService === 'All Services' 
-    ? serviceData 
-    : serviceData.filter(service => service.name === selectedService);
+    const handleYearChange = (year : any) => {
+        setSelectedYear(year);
+    }
 
-  const filteredCounterData = selectedCounter === 'All Counters'
-    ? counterData
-    : counterData.map(counter => ({ 
-        name: counter.name, 
-        [selectedService]: counter[selectedService as keyof typeof counter] || 0 
-      }));
+    const handleServiceChange = (service : any) => {
+        setSelectedService(service);
+    }
 
-  return (
-    <div className="p-10 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8 mt-16">
-        Statistics
-      </h1>
+    const handleCounterChange = (counter : any) => {
+        setSelectedCounter(counter);
+    }
 
-      {/* Date Picker and Filter Controls */}
-      <div className="flex flex-wrap gap-4 mb-8">
-        <div className="bg-white p-4 rounded-lg shadow-lg">
-          <label className="block text-lg font-semibold mb-2">Select Date Range</label>
-          
+    const handleTimeRangeChange = (timeRange : any) => {
+        setTimeRange(timeRange);
+    }
+
+    const handleSubmit = async () => {
+        let filters = {
+            timeRange: timeRange,
+            date: '',
+            month: '',
+            service: selectedService,
+            counter: selectedCounter
+        }
+
+        if (timeRange === 'daily' && !selectedDate) return
+        if (timeRange === 'monthly' && (!selectedMonth || !selectedCounter)) return
+
+        if (timeRange === 'daily') {
+            filters = { ...filters, date: selectedDate}
+        } else if (timeRange === 'monthly') {
+            filters = { ...filters, month: selectedMonth + selectedYear}
+        } 
+
+        try {
+            const response = await axiosInstance.get('/manager/seeStats', { params: filters });
+            console.log(response.data);
+        } catch (error) {}
+    }
+
+    // Sample data
+    const data = [
+        { service: 'Service 1', counter: 'Counter 1', clientsServed: 12 },
+        { service: 'Service 1', counter: 'Counter 2', clientsServed: 8 },
+        { service: 'Service 2', counter: 'Counter 1', clientsServed: 19 },
+        { service: 'Service 2', counter: 'Counter 2', clientsServed: 14 },
+        { service: 'Service 3', counter: 'Counter 1', clientsServed: 3 },
+        { service: 'Service 3', counter: 'Counter 2', clientsServed: 7 },
+    ];
+
+    const filteredTotal = data
+        .filter(item => 
+        (selectedService === 'All' || item.service === selectedService) &&
+        (selectedCounter === 'All' || item.counter === selectedCounter)
+        )
+        .reduce((total, item) => total + item.clientsServed, 0);
+
+    return (
+        <div className="p-8 bg-gray-100 min-h-screen">
+            {/* Section des filtres */}
+            <div className="flex flex-col md:flex-row justify-between mb-8 mt-16">
+                <div className="flex space-x-4 mb-4 md:mb-0">
+                    <select
+                        className="p-2 border rounded"
+                        value={timeRange}
+                        onChange={(e) => handleTimeRangeChange(e.target.value)}>
+                        <option value="daily">Day</option>
+                        <option value="weekly">Week</option>
+                        <option value="monthly">Month</option>
+                    </select>
+        
+                    {/* Sélecteur basé sur timeRange */}
+                    {
+                        timeRange === 'daily' ? (
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={(date) => handleDateChange(date)}
+                            dateFormat="dd/MM/yyyy"
+                            placeholderText="Select a date"
+                            className="p-2 border rounded cursor-pointer"/>
+                        ) : timeRange === 'weekly' ? (
+                            <span></span> // Utilisation de la logique spécifique à la semaine si besoin
+                        ) : (
+                            <div className="flex space-x-2">
+                                <select
+                                    className="p-2 border rounded cursor-pointer"
+                                    value={selectedMonth}
+                                    onChange={(e) => handleMonthChange(e.target.value)}>
+                                    
+                                    <option value="">Select Month</option>
+                                    {months.map((month) => (
+                                    <option key={month.value} value={month.value}>
+                                        {month.label}
+                                    </option>
+                                    ))}
+                                </select>
+                    
+                                <select
+                                    className="p-2 border rounded cursor-pointer"
+                                    value={selectedYear}
+                                    onChange={(e) => handleYearChange(e.target.value)}>
+                                    
+                                    <option value="">Select Year</option>
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )
+                    }
+        
+                    <select
+                        className="p-2 border rounded cursor-pointer"
+                        value={selectedService}
+                        onChange={(e) => handleServiceChange(e.target.value)}>
+                        <option value="All">All Services</option>
+                        <option value="Service 1">Service 1</option>
+                        <option value="Service 2">Service 2</option>
+                        <option value="Service 3">Service 3</option>
+                    </select>
+            
+                    <select
+                        className="p-2 border rounded cursor-pointer"
+                        value={selectedCounter}
+                        onChange={(e) => handleCounterChange(e.target.value)}>
+                        <option value="All">All Counters</option>
+                        <option value="Counter 1">Counter 1</option>
+                        <option value="Counter 2">Counter 2</option>
+                    </select>
+            
+                    <button className="p-2 bg-blue-500 text-white rounded">Apply Filters</button>
+                </div>
+            </div>
+
+            {/* Section d'affichage des données */}
+            <div className="bg-white p-6 rounded shadow mb-8">
+                <h2 className="text-lg font-semibold mb-4">Total Clients Served</h2>
+                <p className="text-2xl font-bold text-center">{filteredTotal}</p>
+            </div>
+            
+            {/* Section des indicateurs de performance */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white p-6 rounded shadow text-center">
+                    <h3 className="text-sm font-medium text-gray-500">Total Clients Today</h3>
+                    <p className="text-2xl font-bold">56</p>
+                </div>
+                <div className="bg-white p-6 rounded shadow text-center">
+                    <h3 className="text-sm font-medium text-gray-500">Total Clients This Week</h3>
+                    <p className="text-2xl font-bold">340</p>
+                </div>
+                <div className="bg-white p-6 rounded shadow text-center">
+                    <h3 className="text-sm font-medium text-gray-500">Total Clients This Month</h3>
+                    <p className="text-2xl font-bold">1245</p>
+                </div>
+            </div>
         </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-lg">
-          <label className="block text-lg font-semibold mb-2">Filter by Service</label>
-          <select
-            value={selectedService}
-            onChange={(e) => setSelectedService(e.target.value)}
-            className="block border rounded py-2 px-4"
-          >
-            <option>All Services</option>
-            <option>Haircut</option>
-            <option>Shave</option>
-            <option>Hair wash</option>
-            <option>Beard trim</option>
-            <option>Facial</option>
-          </select>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-lg">
-          <label className="block text-lg font-semibold mb-2">Filter by Counter</label>
-          <select
-            value={selectedCounter}
-            onChange={(e) => setSelectedCounter(e.target.value)}
-            className="block border rounded py-2 px-4">
-            <option>All Counters</option>
-            <option>Counter 1</option>
-            <option>Counter 2</option>
-            <option>Counter 3</option>
-            <option>Counter 4</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Service Statistics Bar Chart */}
-      <div className="mb-12 bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">Customers Served Per Service</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={filteredServiceData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="daily" fill="#8884d8" name="Daily" />
-            <Bar dataKey="weekly" fill="#82ca9d" name="Weekly" />
-            <Bar dataKey="monthly" fill="#ffc658" name="Monthly" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-
-      {/* Counter Distribution Pie Chart */}
-      <div className="mb-12 bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">
-          Customer Distribution by Counter
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={pieData}
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              fill="#8884d8"
-              dataKey="value"
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Counter Service Line Chart */}
-      <div className="bg-white p-6 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">
-          Counters Serving Statistics
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart
-            data={counterData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="Haircut"
-              stroke="#8884d8"
-              name="Haircut"
-            />
-            <Line
-              type="monotone"
-              dataKey="Shave"
-              stroke="#82ca9d"
-              name="Shave"
-            />
-            <Line
-              type="monotone"
-              dataKey="HairWash"
-              stroke="#ffc658"
-              name="Hair Wash"
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default Statistics;
