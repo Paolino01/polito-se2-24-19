@@ -6,19 +6,9 @@ import { CounterSet } from '../../utils/interfaces';
 const Monitor = (props: any) => {
   const socket = io("http://localhost:3000/");
 
-  let [nextCustomerIds, setNextCustomerIds] = useState(['']); // Customer IDs for each counter
-  //let [counterNumbers, setCounterNumbers] = useState(['']); // Four counters
-
+  let services: string[];                       //Saves all the services offered by the company
+  const [update, setUpdate] = useState(false);  //Needed to trigger page update when needed
   let [counterNumbers, setCounterNumbers] = useState<Record<string, string>>({});
-
-  //ALTERNATIVE WAY
-  //The key is the number of the counter, the value is the id of the next customer
-  /*let counterNumbers: Record<string, string> = {
-    "C1": "1234",
-    "C2": "5678",
-    "C3": "9101",
-    "C4": "1121"
-  };*/
 
   let [queues, setQueues] = useState<Record<string, number>>({});
 
@@ -27,18 +17,36 @@ const Monitor = (props: any) => {
       for(let cn of cs.counters) {
         counterNumbers[cn] = '';
       }
-      setQueues({});
+      for(let s of cs.services) {
+        queues[s] = 0;
+      }
+      services = cs.services;
+      console.log(queues);
+      setUpdate(!update);
     });
   }, []);
 
   socket.on("nextCustomer", (arg) => {
     counterNumbers[arg["counter_id"]] = arg["customer_id"];
     console.log(arg);
-    setQueues(arg['queues_people']);
+    console.log(queues);
+    if(services != undefined) {
+      for(let s of services) {
+        if(s in Object.keys(arg["queues_people"]))
+          queues[s] = arg["queues_people"][s];
+        else
+          queues[s] = 0;
+      }
+    }
+    setUpdate(!update);
+    console.log(queues);
   });
 
   socket.on("newCustomer", (arg) => {
-    setQueues(arg);
+    for(let s of Object.keys(arg)) {
+      queues[s] = arg[s];
+    }
+    setUpdate(!update);
   });
 
   return (
