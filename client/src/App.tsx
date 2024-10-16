@@ -26,9 +26,9 @@ function App() {
   };
 
   //Monitor
-  const getCounterNumbers = async () => {
+  /*const getCounterNumbers = async () => {
     return await API.getCounterNumbers();
-  };
+  };*/
 
   return (
     <Routes>
@@ -48,7 +48,7 @@ function App() {
         <Route path="/customer" element={<ServiceSelector />} />
         <Route
           path="/monitor"
-          element={<Monitor getCounterNumbers={getCounterNumbers} />}
+          element={<Monitor />}
         />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/administrator" element={<AdminPage />} />

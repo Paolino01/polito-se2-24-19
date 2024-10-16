@@ -8,7 +8,7 @@ const SERVER_URL = 'http://localhost:3000';
  * @returns the services provided by this counter
  */
 const getCounterInformation = async (counterId: number) => {
-    const response = await fetch(SERVER_URL + "/officer/temporary-path/" + counterId, {
+    const response = await fetch(SERVER_URL + "/officer/services/" + counterId, {
         method: 'GET'
     });
     if (response.ok) {
@@ -33,7 +33,7 @@ const getCounterInformation = async (counterId: number) => {
  * @returns nothing
  */
 const markAsServed = async (counterId: number) => {
-    const response = await fetch(SERVER_URL + "/officer/markAsServed/", {
+    const response = await fetch(SERVER_URL + "/officer/mark-as-served/", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -85,8 +85,8 @@ const nextCustomer = async (counterId: number) => {
 
 
 //Monitor
-const getCounterNumbers = async () => {
-    const response = await fetch(SERVER_URL + "/monitor/getCounterNumbers/", {
+/*const getCountersAndServices = async () => {
+    const response = await fetch(SERVER_URL + "/admin", {
         method: 'GET',
         credentials: 'include'
     });
@@ -102,7 +102,7 @@ const getCounterNumbers = async () => {
 
         throw new Error("Error retreiving counter numbers");
     }
-}
+}*/
 
 
 export const fetchAdminData = async (): Promise<CounterSet> => {
@@ -130,5 +130,5 @@ export const saveAssociations = async (associations: Record<string, string[]>): 
     return true;
 };
 
-const API = { getCounterInformation, markAsServed, nextCustomer, getCounterNumbers };
+const API = { getCounterInformation, markAsServed, nextCustomer };
 export default API;

@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { io } from "socket.io-client";
+import { fetchAdminData } from '../../API';
+import { CounterSet } from '../../utils/interfaces';
 
 const Monitor = (props: any) => {
   const socket = io("http://localhost:3000/");
 
-  let [nextCustomerIds] = useState(['1234', '5678', '9101', '1121']); // Customer IDs for each counter
-  let [counterNumbers] = useState(['c1', 'c2', 'c3', 'c4']); // Four counters
+  let [nextCustomerIds, setNextCustomerIds] = useState(['']); // Customer IDs for each counter
+  //let [counterNumbers, setCounterNumbers] = useState(['']); // Four counters
+
+  let [counterNumbers, setCounterNumbers] = useState<Record<string, string>>({});
 
   //ALTERNATIVE WAY
   //The key is the number of the counter, the value is the id of the next customer
@@ -16,31 +20,25 @@ const Monitor = (props: any) => {
     "C4": "1121"
   };*/
 
-  const [queues, setQueues] = useState([
-    ['Haircut', 10],
-    ['Shave', 5],
-    ['Hair wash', 2],
-    ['Beard trim', 8],
-    ['Hair coloring', 4],
-    ['Facial', 2],
-    ['Manicure', 5],
-    ['Pedicure', 5],
-  ]);
+  let [queues, setQueues] = useState<Record<string, number>>({});
 
-  /*useEffect(() => {
-    props.getCounterNumbers().then((cn: string[]) => {
-      setCounterNumbers(cn);  
+  useEffect(() => {
+    fetchAdminData().then((cs: CounterSet) => {
+      for(let cn of cs.counters) {
+        counterNumbers[cn] = '';
+      }
+      setQueues({});
     });
-  }, []);*/
+  }, []);
 
   socket.on("nextCustomer", (arg) => {
+    counterNumbers[arg["counter_id"]] = arg["customer_id"];
     console.log(arg);
-    nextCustomerIds[counterNumbers.indexOf(arg["counter_id"])] = arg["customer_id"];
-    console.log(counterNumbers);
+    setQueues(arg['queues_people']);
   });
 
   socket.on("newCustomer", (arg) => {
-    //setQueues(arg); //TODO: check that the data received from backend are right
+    setQueues(arg);
   });
 
   return (
@@ -56,20 +54,20 @@ const Monitor = (props: any) => {
             Currently Serving
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {counterNumbers.map((counter, index) => (
-              <div key={index} className="p-4 bg-blue-100 rounded-lg shadow-sm">
+          {Object.entries(counterNumbers).map(([cn, customerId]) => (
+              <div key={cn} className="p-4 bg-blue-100 rounded-lg shadow-sm">
                 <h3 className="text-lg font-bold text-blue-800 mb-2">
-                  Counter {counter}
+                  Counter {cn}
                 </h3>
                 <p className="text-md text-gray-800">
                   Customer ID:{' '}
                   <span className="font-semibold">
-                    {nextCustomerIds[index]}
+                    {customerId}
                   </span>
                 </p>
-                <p className="text-md text-gray-800">
+                {/*<p className="text-md text-gray-800">
                   Service: <span className="font-semibold">Haircut</span>
-                </p>
+                </p>*/}
               </div>
             ))}
           </div>
@@ -81,15 +79,15 @@ const Monitor = (props: any) => {
             Service Queues
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {queues.map((queue, index) => (
+            {Object.entries(queues).map(([s, n]) => (
               <div
-                key={index}
+                key={s}
                 className="p-3 bg-gray-50 border rounded-md shadow-sm"
               >
                 <p className="text-lg font-medium text-gray-800">
-                  {queue[0]}:{' '}
+                  {s}:{' '}
                   <span className="font-semibold text-blue-600">
-                    {queue[1]} waiting
+                    {n} waiting
                   </span>
                 </p>
               </div>
