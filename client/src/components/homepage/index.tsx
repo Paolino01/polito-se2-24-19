@@ -52,7 +52,8 @@ function Homepage() {
                 <option value="c1">Officer 1</option>
                 <option value="c2">Officer 2</option>
                 <option value="c3">Officer 3</option>
-                {/* Aggiungi altre opzioni se necessario */}
+                <option value="c4">Officer 4</option>
+                <option value="c5">Officer 5</option>
               </select>
               <Link to={`/officer/${officerId}`}>
                 <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 ml-2">

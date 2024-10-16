@@ -83,28 +83,7 @@ const nextCustomer = async (counterId: number) => {
     }
 }
 
-
-//Monitor
-/*const getCountersAndServices = async () => {
-    const response = await fetch(SERVER_URL + "/admin", {
-        method: 'GET',
-        credentials: 'include'
-    });
-    if (response.ok) {
-        return response.json();
-    }
-    else {
-        const errDetail = await response.json();
-        if (errDetail.error)
-            throw errDetail.error
-        if (errDetail.message)
-            throw errDetail.message
-
-        throw new Error("Error retreiving counter numbers");
-    }
-}*/
-
-
+//Admin
 export const fetchAdminData = async (): Promise<CounterSet> => {
     const response = await fetch(SERVER_URL + '/admin');
     console.log(response)
