@@ -1,7 +1,5 @@
 import { Server } from 'socket.io';
 import http from 'http';
-import { emitEvent } from './services/socketService';
-import { getQueuesLengths } from './services/queueService';
 
 let io: Server;
 
@@ -13,12 +11,8 @@ export const initializeSocket = (server: http.Server): Server => {
         }
     });
 
-    io.on('connection', async (socket) => {
+    io.on('connection', (socket) => {
         console.log('Un client si è connesso');
-
-        const newQueueLengths = await getQueuesLengths();
-
-        emitEvent('newCustomer', newQueueLengths)
 
         socket.on('disconnect', () => {
             console.log('Un client si è disconnesso');
