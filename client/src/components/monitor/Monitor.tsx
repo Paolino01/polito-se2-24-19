@@ -40,11 +40,7 @@ const Monitor = () => {
         setQueues((prevQueues) => {
           const updatedQueues = { ...prevQueues };
           for (let s of services) {
-            if (arg['queues_people'].hasOwnProperty(s)) {
-              updatedQueues[s] = arg['queues_people'][s];
-            } else {
-              updatedQueues[s] = 0;
-            }
+            updatedQueues[s] = arg['queues_people']?.[s] || 0;
           }
           return updatedQueues;
         });
@@ -55,7 +51,7 @@ const Monitor = () => {
       setQueues((prevQueues) => {
         const updatedQueues = { ...prevQueues };
         for (let s of Object.keys(arg)) {
-          updatedQueues[s] = arg[s];
+          updatedQueues[s] = arg[s] || 0;
         }
         return updatedQueues;
       });
@@ -93,7 +89,7 @@ const Monitor = () => {
                   </h3>
                   <p className="text-md text-gray-800">
                     Customer ID:{' '}
-                    <span className="font-semibold">{customerId}</span>
+                    <span className="font-semibold">{customerId || 'N/A'}</span>
                   </p>
                   {/*<p className="text-md text-gray-800">
                     Service: <span className="font-semibold">Haircut</span>

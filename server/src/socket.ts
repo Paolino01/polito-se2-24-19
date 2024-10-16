@@ -16,10 +16,12 @@ export const initializeSocket = (server: http.Server): Server => {
     io.on('connection', async (socket) => {
         console.log('Un client si è connesso');
 
-        const newQueueLengths = await getQueuesLengths();
-
-        emitEvent('newCustomer', newQueueLengths)
-
+        try {
+            const newQueueLengths = await getQueuesLengths();
+            emitEvent('newCustomer', newQueueLengths);
+        } catch (error) {
+            console.error('Errore durante il recupero delle lunghezze delle code:', error);
+        }
         socket.on('disconnect', () => {
             console.log('Un client si è disconnesso');
         });
