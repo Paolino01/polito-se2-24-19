@@ -1,16 +1,16 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from "socket.io-client";
 import { fetchAdminData } from '../../API';
 import { CounterSet } from '../../utils/interfaces';
 
-const Monitor = (props: any) => {
+const Monitor = () => {
   const socket = io("http://localhost:3000/");
 
   let services: string[];                       //Saves all the services offered by the company
   const [update, setUpdate] = useState(false);  //Needed to trigger page update when needed
-  let [counterNumbers, setCounterNumbers] = useState<Record<string, string>>({});
+  let [counterNumbers] = useState<Record<string, string>>({});
 
-  let [queues, setQueues] = useState<Record<string, number>>({});
+  let [queues] = useState<Record<string, number>>({});
 
   useEffect(() => {
     fetchAdminData().then((cs: CounterSet) => {
