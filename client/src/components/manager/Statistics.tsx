@@ -171,7 +171,7 @@ const Statistics = () => {
                         <option value="Counter 2">Counter 2</option>
                     </select>
             
-                    <button className="p-2 bg-blue-500 text-white rounded">Apply Filters</button>
+                    <button onClick={handleSubmit} className="p-2 bg-blue-500 text-white rounded">Apply Filters</button>
                 </div>
             </div>
 
