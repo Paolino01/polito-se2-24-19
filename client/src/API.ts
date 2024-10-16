@@ -8,12 +8,8 @@ const SERVER_URL = 'http://localhost:3000';
  * @returns the services provided by this counter
  */
 const getCounterInformation = async (counterId: number) => {
-    const response = await fetch(SERVER_URL + "/officer/services/", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ counter_id: counterId })
+    const response = await fetch(SERVER_URL + "/officer/temporary-path/" + counterId, {
+        method: 'GET'
     });
     if (response.ok) {
         const services = await response.text();
@@ -90,7 +86,7 @@ const nextCustomer = async (counterId: number) => {
 
 //Monitor
 const getCounterNumbers = async () => {
-    const response = await fetch(SERVER_URL + "/getCounterNumbers/", {
+    const response = await fetch(SERVER_URL + "/monitor/getCounterNumbers/", {
         method: 'GET',
         credentials: 'include'
     });

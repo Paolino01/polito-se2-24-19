@@ -4,8 +4,17 @@ import { io } from "socket.io-client";
 const Monitor = (props: any) => {
   const socket = io("http://localhost:3000/");
 
-  const nextCustomerIds = ['1234', '5678', '9101', '1121']; // Customer IDs for each counter
-  const [counterNumbers, setCounterNumbers] = useState(['1', '2', '3', '4']); // Four counters
+  let [nextCustomerIds] = useState(['1234', '5678', '9101', '1121']); // Customer IDs for each counter
+  let [counterNumbers] = useState(['c1', 'c2', 'c3', 'c4']); // Four counters
+
+  //ALTERNATIVE WAY
+  //The key is the number of the counter, the value is the id of the next customer
+  /*let counterNumbers: Record<string, string> = {
+    "C1": "1234",
+    "C2": "5678",
+    "C3": "9101",
+    "C4": "1121"
+  };*/
 
   const [queues, setQueues] = useState([
     ['Haircut', 10],
@@ -18,19 +27,20 @@ const Monitor = (props: any) => {
     ['Pedicure', 5],
   ]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     props.getCounterNumbers().then((cn: string[]) => {
       setCounterNumbers(cn);  
     });
-  });
+  }, []);*/
 
   socket.on("nextCustomer", (arg) => {
     console.log(arg);
-    //TODO: manage the argument received
+    nextCustomerIds[counterNumbers.indexOf(arg["counter_id"])] = arg["customer_id"];
+    console.log(counterNumbers);
   });
 
-  socket.on("updateQueue", (arg) => {
-    setQueues(arg); //TODO: check that the data received from backend are right
+  socket.on("newCustomer", (arg) => {
+    //setQueues(arg); //TODO: check that the data received from backend are right
   });
 
   return (
@@ -46,7 +56,7 @@ const Monitor = (props: any) => {
             Currently Serving
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {counterNumbers.map((counter, index) => (
+          {counterNumbers.map((counter, index) => (
               <div key={index} className="p-4 bg-blue-100 rounded-lg shadow-sm">
                 <h3 className="text-lg font-bold text-blue-800 mb-2">
                   Counter {counter}
@@ -66,8 +76,10 @@ const Monitor = (props: any) => {
         </div>
 
         {/* Queues Section */}
-        <div className="mb-10">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Service Queues</h2>
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+            Service Queues
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {queues.map((queue, index) => (
               <div

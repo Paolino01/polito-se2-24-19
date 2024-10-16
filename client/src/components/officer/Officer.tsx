@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 function Officer(props: any) {
     const [services, setServices] = useState([]);
-    const [customerId, setCustomerId] = useState('Call the first customer');
+    const [customerId, setCustomerId] = useState('');
     const [served, setServed] = useState(false);
 
     useEffect(() => {
