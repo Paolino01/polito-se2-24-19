@@ -48,6 +48,7 @@ const Monitor = () => {
           }
           return updatedQueues;
         });
+        console.log(queues);
       }
     };
 
