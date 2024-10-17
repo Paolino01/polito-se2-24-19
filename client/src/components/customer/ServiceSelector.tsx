@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import axiosInstance from '../../utils/axiosInstance';
-import { set } from 'react-datepicker/dist/date_utils';
 
 const ServiceSelector = () => {
-  const [selectedService, setSelectedService] = useState('');
+  const [selectedService, setSelectedService] = useState<
+    keyof typeof services | ''
+  >('');
   const [error, setError] = useState('');
   const [ticketUrl, setTicketUrl] = useState('');
   const [requestOK, setRequestOK] = useState(false);
@@ -13,13 +14,19 @@ const ServiceSelector = () => {
   const [peopleWaiting, setPeopleWaiting] = useState(0);
   const [waitingTime, setWaitingTime] = useState('');
 
-  const services = ['A', 'B', 'C', 'D'];
+  // Mappatura dei servizi
+  const services = {
+    'A - Mailing': 'A',
+    'B - Package Pickup': 'B',
+    'C - Money Transfer': 'C',
+    'D - Passport Services': 'D',
+  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
       const response: any = await axiosInstance.post('customer/new-ticket', {
-        selected_service: selectedService,
+        selected_service: services[selectedService as keyof typeof services], // Invia il valore originale del servizio
       });
       if (response.status === 200) {
         setId(response.data.id);
@@ -27,7 +34,7 @@ const ServiceSelector = () => {
         setWaitingTime(response.data.waiting_time);
 
         setTicketUrl(
-          `http://localhost:5173/ticket/${id}/${peopleWaiting}/${waitingTime}`,
+          `http://localhost:5173/ticket/${response.data.id}/${response.data.people_waiting}/${response.data.waiting_time}`,
         );
         setRequestOK(true);
       } else {
@@ -75,7 +82,7 @@ const ServiceSelector = () => {
               <option value="" disabled>
                 Select a service
               </option>
-              {services.map((service, index) => (
+              {Object.keys(services).map((service, index) => (
                 <option key={index} value={service}>
                   {service}
                 </option>
