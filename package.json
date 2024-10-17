@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "concurrently": "^7.0.0"
+  },
+  "scripts": {
+    "start:server": "cd server && npm run start:all",
+    "start:client": "cd client && npm start",
+    "start:all": "concurrently \"npm run start:server\" \"npm run start:client\""
+  },
+  "name": "polito-se2-24-19",
+  "version": "1.0.0",
+  "description": "Run:\r ```\r cd client\r npm install\r npm run dev\r ```",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
+}
