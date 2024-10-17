@@ -1,4 +1,4 @@
-TEMPLATE FOR RETROSPECTIVE (Team ##)
+TEMPLATE FOR RETROSPECTIVE (Team 19)
 =====================================
 
 The retrospective should include _at least_ the following
@@ -15,16 +15,16 @@ sections:
 - Number of stories committed vs. done
   - Committed: 5
   - Done: 4
-- Total points committed vs. done 
+
+- Total points committed vs. done  
   - Committed: 16
   - Done: 11
 
 - Nr of hours planned vs. spent (as a team)
-  - Planned: 96h
+  - Planned: 88h
   - Spent: 95h20m
 
-**Remember**a story is done ONLY if it fits the Definition of Done:
- 
+**Remember**a story is done ONLY if it fits the Definition of Done:  
 - Unit Tests passing
 - Code review completed
 - Code present on VCS
@@ -68,32 +68,33 @@ sections:
   - Total hours spent: 0h
   - Nr of automated unit test cases: 0
   - Coverage (if available)  
-NB: we did NOT perform any unit testing
+> Note: we did NOT perform any unit testing
 - E2E testing:
-  - Total hours estimated: 3h
-  - Total hours spent: 2h30m
-- Code review 
+  - Total hours estimated: 4h  
+  - Total hours spent: 5h50m
+- Code review:
   - Total hours estimated: 3h
   - Total hours spent: 2h30m
   
-
-
 ## ASSESSMENT
 
-- What caused your errors in estimation (if any)?
-  We underestimated some tasks
+- What caused your errors in estimation (if any)?  
+  We underestimated the time needed for some tasks (like the "See stats" one), and we did not take into account the testing.
 
 - What lessons did you learn (both positive and negative) in this sprint?  
-  We should estimate all the 96 hours at the start of the sprint, and we should also take unit testing into account
+  - We should estimate all the 96 hours at the beginning of each sprint, and we should also take both unit and integration testing into account.
+  - Communicate any problems encountered in good time.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?  
-  This is the first retrospective
+  Not applicable, this is the first retrospective
   
 - Which ones you were not able to achieve? Why?  
-  This is the first retrospective
+  Not applicable, this is the first retrospective
 
-- Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-
+- Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)  
   > Propose one or two
+  - Better initial communication between front-end and back-end teams to define the structure needed in order to work independently on each task assigned.
+  - Better workload distribution in order not to rush on the last days. This could be achieved with a better Sprint and personal planning.  
 
-- One thing you are proud of as a Team!!
+- One thing you are proud of as a Team!!  
+Good synergy between members.
