@@ -70,11 +70,11 @@ sections:
   - Coverage (if available)  
 > Note: we did NOT perform any unit testing
 - E2E testing:
-  - Total hours estimated: 5h  
-  - Total hours spent: 6h50m
+  - Total hours estimated: 4h  
+  - Total hours spent: 5h50m
 - Code review:
-  - Total hours estimated: 3h
-  - Total hours spent: 2h30m
+  - Total hours estimated: 4h
+  - Total hours spent: 3h30m
   
 ## ASSESSMENT
 
