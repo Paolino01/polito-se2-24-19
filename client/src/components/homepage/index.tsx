@@ -12,7 +12,7 @@ function Homepage() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Project Name</h1>
+        <h1 className="text-4xl font-bold mb-4">Post Office</h1>
         <div className="flex flex-col items-center space-y-4">
           <div className="flex space-x-4">
             <Link to="/customer">
