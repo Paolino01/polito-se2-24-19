@@ -50,6 +50,7 @@ export const getNextCustomer = async (counter_id: CountersID): Promise<string | 
     queues_length,
   );
   emitEvent('nextCustomer', new_call);
+  emitEvent('newCustomer', queues_length);
 
   return ticketToCall;
 }; // getNextCustomer

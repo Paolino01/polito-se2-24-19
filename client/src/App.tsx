@@ -4,8 +4,6 @@ import Officer from './components/officer/Officer';
 import ServiceSelector from './components/customer/ServiceSelector';
 import Monitor from './components/monitor/Monitor';
 import Statistics from './components/manager/Statistics';
-import { BottomBar } from './components/bottombar/Bottombar';
-import { NavB } from './components/navbar/Navbar';
 import API from './API';
 import { Homepage } from './components/homepage';
 import Layout from './Layout';
@@ -26,9 +24,9 @@ function App() {
   };
 
   //Monitor
-  const getCounterNumbers = async () => {
+  /*const getCounterNumbers = async () => {
     return await API.getCounterNumbers();
-  };
+  };*/
 
   return (
     <Routes>
@@ -48,7 +46,7 @@ function App() {
         <Route path="/customer" element={<ServiceSelector />} />
         <Route
           path="/monitor"
-          element={<Monitor getCounterNumbers={getCounterNumbers} />}
+          element={<Monitor />}
         />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/administrator" element={<AdminPage />} />
